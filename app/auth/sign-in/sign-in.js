@@ -3,8 +3,7 @@ import { View, ImageBackground, Text, TextInput, Button } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-export default function AddAssistence({ navigation  }) {
- 
+export default function AddAssistence({ navigation }) {
   return (
     <ImageBackground
       source={{

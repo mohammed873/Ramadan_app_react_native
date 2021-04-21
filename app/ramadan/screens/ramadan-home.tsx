@@ -28,7 +28,7 @@ export default function RamadanHome({ navigation }) {
     }
   return (
     <View style={styles.container}>
-      {/* <View
+      <View
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -49,7 +49,7 @@ export default function RamadanHome({ navigation }) {
         >
           Futors
         </Text>
-      </View> */}
+      </View>
       <View>
             {/* <Text> Test Booked : {ramadanEnum.BOOKED} & Test Free : {ramadanEnum.FREE}</Text>
             <Text> {(username === '') ? '' : 'Bonjour, Je suis : '+ username} </Text>
