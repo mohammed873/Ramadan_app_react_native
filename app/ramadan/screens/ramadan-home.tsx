@@ -28,7 +28,7 @@ export default function RamadanHome({ navigation }) {
     }
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -47,9 +47,9 @@ export default function RamadanHome({ navigation }) {
             marginTop: 16
           }}
         >
-          Home
+          Futors
         </Text>
-      </View>
+      </View> */}
       <View>
             {/* <Text> Test Booked : {ramadanEnum.BOOKED} & Test Free : {ramadanEnum.FREE}</Text>
             <Text> {(username === '') ? '' : 'Bonjour, Je suis : '+ username} </Text>
@@ -71,6 +71,12 @@ export default function RamadanHome({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder={'entrer longitude'}
+              onChangeText={onChangeLongitude}
+              value={longitude}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder={'entrer place number'}
               onChangeText={onChangeLongitude}
               value={longitude}
             />
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    margin: 12,
+    margin: 9,
     borderWidth: 1,
     backgroundColor:'white',
     textAlign:'center'

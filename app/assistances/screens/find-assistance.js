@@ -1,19 +1,51 @@
-import * as React from 'react';
-import { Button, View , ImageBackground } from 'react-native';
+import React,{useEffect} from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import {RamadanMapsEnum} from '../../shared/enums/ramdan_maps.enum';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
-export default function FindAssistence({ navigation }) {
+export default function HelpMap() {
+    let ramadanMapsEnum = RamadanMapsEnum;  
+    let coordinates_marker = {
+        latitude : 32.296418099951424,
+        longitude : -9.241842831480078
+    }
+
   return (
-    <ImageBackground 
-              source={{uri: 'http://papers.co/wallpaper/papers.co-vk51-android-lollipop-material-design-dark-yellow-pattern-4-wallpaper.jpg'}}
-              style={{ flex: 1
-                }}
-           >     
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button
-        onPress={() => navigation.navigate('Notifications')}
-        title="this is find assis"
-      />
+    <View style={styles.container}>
+      
+      <MapView
+        provider = {PROVIDER_GOOGLE}
+        style = {styles.map}
+        initialRegion = {{
+          latitude : 32.29512789087331,
+          longitude : -9.233774559186537,
+          latitudeDelta : 0.0222,
+          longitudeDelta : 0.0121 
+        }}
+        >
+            <Marker coordinate = {coordinates_marker}/>
+        </MapView>
+ 
     </View>
-    </ImageBackground >
   );
 }
+
+export function Test(){
+    console.log('hola')
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    height : '40%'
+  },
+  text : {
+      textAlign : 'center',
+  },
+  map: {
+    flex : 1,
+    height : '20%',
+    width : 340,
+  }
+});
+
