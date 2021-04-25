@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import { StyleSheet, Text, View,TextInput,Button,Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,Alert ,ScrollView} from 'react-native';
 import { RamadanController } from './controllers/ramadan-controller';
 import { Ramadan } from '../../shared/models/ramadan.model'
 import firebase from 'firebase'
@@ -26,10 +26,11 @@ export default function RamadanHome({ navigation }) {
     const [message, onChangeMessage] = React.useState("");
     const [latitude, onChangeLatitude] = React.useState("");
     const [longitude, onChangeLongitude] = React.useState(""); 
+    const [email, setEmail] = React.useState(""); 
 
 
     var db = firebase.firestore().collection('reservations')
-
+    var db1 = firebase.firestore().collection('ftur_reservation')     
     // add new query to firsbae
     function add(){
       db.add({
@@ -47,7 +48,20 @@ export default function RamadanHome({ navigation }) {
       })
     }
 
+     let code = Math.random().toString(36).substring(7);
+     console.log("random", code);
 
+     function ReserveFutur(){
+       db1.get
+       db1.add({
+         email: email,
+         code: code
+       }).then(res=>{
+         setEmail('')
+       }).catch(err=>{
+         console.log(err);
+       })
+     }
 
   return (
     <View style={styles.container}>
@@ -73,10 +87,11 @@ export default function RamadanHome({ navigation }) {
           Futors
         </Text>
       </View>
+ 
       <View>
             <TextInput
               style={styles.input}
-              placeholder={'entrer username'}
+              placeholder={'entrer tables number'}
               onChangeText={setTables}
               value={tables}
             />
@@ -94,7 +109,7 @@ export default function RamadanHome({ navigation }) {
             />
             <TextInput
               style={styles.input}
-              placeholder={'entrer place Message'}
+              placeholder={'entrer  message'}
               onChangeText={onChangeMessage}
               value={message}
             />
@@ -111,15 +126,20 @@ export default function RamadanHome({ navigation }) {
           </View>
           <View style={{marginTop:'6%' ,width:'93%', height:'90%',marginLeft:'2.5%'}}>
             <Map></Map>
-            <View style={{width:'100%', marginLeft:"1%", marginTop:'2%'}}>
+            <View style={{width:'98%', marginLeft:"2%", marginTop:'2%'}}>
             <Button
-                color='green'
+                color='red'
                 title="Reserve Place"
                 onPress={() => {
-                    Alert.alert('T9der takhed lmo3awana');
-                    Reserv()
+                    ReserveFutur()
                 }}
               />
+              <TextInput
+              style={{backgroundColor:'white',marginTop:5, textAlign:'center', padding: 2,}}
+              placeholder={'entrer your Email'}
+              onChangeText={setEmail}
+              value={email}
+            />
            </View>
           </View>
     </View>
@@ -135,7 +155,9 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    margin: 6,
+    marginLeft: '3%',
+    marginTop: 5,
+    width: '94%',
     borderWidth: 1,
     backgroundColor:'white',
     textAlign:'center'

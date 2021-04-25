@@ -6,17 +6,17 @@ import { ListItem } from 'react-native-elements'
 import firebase from 'firebase'
 import firestore from 'firebase/firestore'
 
-    // init firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDCksrr5-hR6N1dvAz7aOSklKyUg5P-tDk",
-      authDomain: "ramadan-20380.firebaseapp.com",
-      projectId: "ramadan-20380",
-      storageBucket: "ramadan-20380.appspot.com",
-      messagingSenderId: "532203398613",
-      appId: "1:532203398613:web:8925f5a1f579f71d91095c"
-    };
-  //  firebase.initializeApp(firebaseConfig);
-  firebase.firestore();
+  // init firebase config
+   const firebaseConfig = {
+  apiKey: "AIzaSyDCksrr5-hR6N1dvAz7aOSklKyUg5P-tDk",
+  authDomain: "ramadan-20380.firebaseapp.com",
+  projectId: "ramadan-20380",
+  storageBucket: "ramadan-20380.appspot.com",
+  messagingSenderId: "532203398613",
+  appId: "1:532203398613:web:8925f5a1f579f71d91095c"
+};
+// firebase.initializeApp(firebaseConfig);
+firebase.firestore();
 
 export default function RamadanMap() {
   const [info, setInfo] = useState([]); 

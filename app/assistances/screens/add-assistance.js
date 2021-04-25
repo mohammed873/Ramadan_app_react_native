@@ -5,6 +5,7 @@ import { RamadanEnum } from '../../shared/enums/ramadan.enum'
 import Map from './find-assistance'
 import firebase from 'firebase'
 import firestore from 'firebase/firestore'
+import emailjs from 'emailjs-com';
 
 // init firebase config
 const firebaseConfig = {
@@ -26,9 +27,10 @@ export default function RamadanHelp({ navigation }) {
   const [message, setMessage] = React.useState('')
   const [latitude, onChangeLatitude] = React.useState('')
   const [longitude, onChangeLongitude] = React.useState('')
+  const [email, setEmail] = React.useState("")
 
   var db = firebase.firestore().collection('assistance')
-
+   var db1 = firebase.firestore().collection('help_reservation')     
   // add new query to firsbae
   function add(){
     db.add({
@@ -46,6 +48,19 @@ export default function RamadanHelp({ navigation }) {
     })
   }
 
+    let code = Math.random().toString(36).substring(7);
+
+     function ReserveHelp(){
+       console.log('mail');
+       db1.add({
+         email: email,
+         code: code
+       }).then(res=>{
+         setEmail('')
+       }).catch(err=>{
+         console.log(err);
+       })
+     }
 
   return (
     <View style={styles.container}>
@@ -92,14 +107,14 @@ export default function RamadanHelp({ navigation }) {
         />
         <TextInput
           style={styles.input}
-          placeholder={'entrer place number'}
+          placeholder={'entrer message'}
           onChangeText={setMessage}
           value={message}
         />
 
         <View style={{ width: '94%', marginLeft: '3%' }}>
           <Button
-            color='grey'
+            color='#059c46'
             title='Add Help'
             onPress={() => {
             
@@ -118,15 +133,21 @@ export default function RamadanHelp({ navigation }) {
         }}
       >
         <Map></Map>
-        <View style={{ width: '100%', marginLeft: '1%', marginTop: '2%' }}>
-          <Button
-            color='green'
-            title='Reserve Place'
-            onPress={() => {
-              Alert.alert('Simple Button pressed')
-            }}
-          />
-        </View>
+        <View style={{width:'98%', marginLeft:"2%", marginTop:'2%'}}>
+            <Button
+                color='red'
+                title="Reserve Place"
+                onPress={() => {
+                    ReserveHelp()
+                }}
+              />
+              <TextInput
+              style={{backgroundColor:'white',marginTop:5, textAlign:'center', padding: 2,}}
+              placeholder={'entrer your Email'}
+              onChangeText={setEmail}
+              value={email}
+            />
+           </View>
       </View>
     </View>
   )
@@ -144,9 +165,11 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    margin: 6,
+    marginLeft: '3%',
+    marginTop: 5,
+    width: '94%',
     borderWidth: 1,
-    backgroundColor: 'white',
-    textAlign: 'center'
-  }
+    backgroundColor:'white',
+    textAlign:'center'
+  },
 })
