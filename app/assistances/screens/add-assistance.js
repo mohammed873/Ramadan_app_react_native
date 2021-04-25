@@ -3,28 +3,50 @@ import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native'
 import { Ramadan } from '../../shared/models/ramadan.model'
 import { RamadanEnum } from '../../shared/enums/ramadan.enum'
 import Map from './find-assistance'
+import firebase from 'firebase'
+import firestore from 'firebase/firestore'
 
+// init firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDCksrr5-hR6N1dvAz7aOSklKyUg5P-tDk",
+  authDomain: "ramadan-20380.firebaseapp.com",
+  projectId: "ramadan-20380",
+  storageBucket: "ramadan-20380.appspot.com",
+  messagingSenderId: "532203398613",
+  appId: "1:532203398613:web:8925f5a1f579f71d91095c"
+};
+// firebase.initializeApp(firebaseConfig);
+firebase.firestore();
 
 export default function RamadanHelp({ navigation }) {
   // let HelpController = new HelpController()
   let ramadanEnum = RamadanEnum
 
-  const [username, onChangeUsername] = React.useState('')
-  const [message, onChangeMessage] = React.useState('')
+  const [tables, setTables] = React.useState('')
+  const [message, setMessage] = React.useState('')
   const [latitude, onChangeLatitude] = React.useState('')
   const [longitude, onChangeLongitude] = React.useState('')
 
-  function add() {
-    console.log('add pressed')
-    let ramadan = new Ramadan()
+  var db = firebase.firestore().collection('assistance')
 
-    ramadan.username = username
-    ramadan.message = message
-    ramadan.latitude = Number(latitude)
-    ramadan.longitude = Number(longitude)
-
-    ramadanController.Add(ramadan)
+  // add new query to firsbae
+  function add(){
+    db.add({
+      Tables : tables,
+      latitude : latitude,
+      longitude : longitude,
+      message : message
+    }).then((res) => {
+      setTables(''),
+      onChangeLatitude(''),
+      onChangeLongitude(''),
+      setMessage('')
+    }).catch(err => {
+      console.error("Error is :", err)
+    })
   }
+
+
   return (
     <View style={styles.container}>
       <View
@@ -50,16 +72,11 @@ export default function RamadanHelp({ navigation }) {
         </Text>
       </View>
       <View>
-        {/* <Text> Test Booked : {ramadanEnum.BOOKED} & Test Free : {ramadanEnum.FREE}</Text>
-            <Text> {(username === '') ? '' : 'Bonjour, Je suis : '+ username} </Text>
-
-            <Text> {(message === '') ? '' : 'Mon message est : '+ message} </Text>
-            <Text> {(latitude === '' && longitude === '') ? '' : 'Ma position est : '+ '('+latitude+','+longitude+')'} </Text> */}
         <TextInput
           style={styles.input}
-          placeholder={'entrer message'}
-          onChangeText={onChangeMessage}
-          value={message}
+          placeholder={'entrer tables number'}
+          onChangeText={setTables}
+          value={tables}
         />
         <TextInput
           style={styles.input}
@@ -76,8 +93,8 @@ export default function RamadanHelp({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder={'entrer place number'}
-          onChangeText={onChangeLongitude}
-          value={longitude}
+          onChangeText={setMessage}
+          value={message}
         />
 
         <View style={{ width: '94%', marginLeft: '3%' }}>
@@ -85,7 +102,7 @@ export default function RamadanHelp({ navigation }) {
             color='grey'
             title='Add Help'
             onPress={() => {
-              Alert.alert('Simple Button pressed')
+            
               add()
             }}
           />
@@ -127,7 +144,7 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    margin: 9,
+    margin: 6,
     borderWidth: 1,
     backgroundColor: 'white',
     textAlign: 'center'

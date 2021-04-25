@@ -1,31 +1,54 @@
 import React,{useEffect} from 'react';
-import { StyleSheet, Text, View,TextInput,Button,Alert } from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,Alert, ScrollView } from 'react-native';
 import { RamadanController } from './controllers/ramadan-controller';
 import { Ramadan } from '../../shared/models/ramadan.model'
+import firebase from 'firebase'
+import firestore from 'firebase/firestore'
 import {RamadanEnum} from '../../shared/enums/ramadan.enum';
+
 import Map from "./ramadan-map";
 
+    // init firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCksrr5-hR6N1dvAz7aOSklKyUg5P-tDk",
+      authDomain: "ramadan-20380.firebaseapp.com",
+      projectId: "ramadan-20380",
+      storageBucket: "ramadan-20380.appspot.com",
+      messagingSenderId: "532203398613",
+      appId: "1:532203398613:web:8925f5a1f579f71d91095c"
+    };
+  // firebase.initializeApp(firebaseConfig);
+  firebase.firestore();
 
 export default function RamadanHome({ navigation }) {
-    let ramadanController = new  RamadanController();
-    let ramadanEnum = RamadanEnum;
-    
-    const [username, onChangeUsername] = React.useState(""); 
+   
+    const [tables, setTables] = React.useState(""); 
     const [message, onChangeMessage] = React.useState("");
     const [latitude, onChangeLatitude] = React.useState("");
     const [longitude, onChangeLongitude] = React.useState(""); 
 
+
+    var db = firebase.firestore().collection('reservations')
+
+    // add new query to firsbae
     function add(){
-        console.log('add pressed')
-        let ramadan = new Ramadan();
-
-        ramadan.username=username;
-        ramadan.message=message;
-        ramadan.latitude=Number(latitude);
-        ramadan.longitude=Number(longitude);
-
-        ramadanController.Add(ramadan);
+      db.add({
+        tables : tables,
+        latitude : latitude,
+        longitude : longitude,
+        message : message
+      }).then((res) => {
+        setTables(''),
+        onChangeLatitude(''),
+        onChangeLongitude(''),
+        onChangeMessage('')
+      }).catch(err => {
+        console.error("Error is :", err)
+      })
     }
+
+
+
   return (
     <View style={styles.container}>
       <View
@@ -51,16 +74,11 @@ export default function RamadanHome({ navigation }) {
         </Text>
       </View>
       <View>
-            {/* <Text> Test Booked : {ramadanEnum.BOOKED} & Test Free : {ramadanEnum.FREE}</Text>
-            <Text> {(username === '') ? '' : 'Bonjour, Je suis : '+ username} </Text>
-
-            <Text> {(message === '') ? '' : 'Mon message est : '+ message} </Text>
-            <Text> {(latitude === '' && longitude === '') ? '' : 'Ma position est : '+ '('+latitude+','+longitude+')'} </Text> */}
             <TextInput
               style={styles.input}
-              placeholder={'entrer message'}
-              onChangeText={onChangeMessage}
-              value={message}
+              placeholder={'entrer username'}
+              onChangeText={setTables}
+              value={tables}
             />
             <TextInput
               style={styles.input}
@@ -76,9 +94,9 @@ export default function RamadanHome({ navigation }) {
             />
             <TextInput
               style={styles.input}
-              placeholder={'entrer place number'}
-              onChangeText={onChangeLongitude}
-              value={longitude}
+              placeholder={'entrer place Message'}
+              onChangeText={onChangeMessage}
+              value={message}
             />
 
            <View style={{width:'94%', marginLeft:"3%"}}>
@@ -86,13 +104,11 @@ export default function RamadanHome({ navigation }) {
                 color='grey'
                 title="Add Help"
                 onPress={() => {
-                    Alert.alert('Simple Button pressed');
                     add()
                 }}
               />
            </View>
           </View>
-          
           <View style={{marginTop:'6%' ,width:'93%', height:'90%',marginLeft:'2.5%'}}>
             <Map></Map>
             <View style={{width:'100%', marginLeft:"1%", marginTop:'2%'}}>
@@ -100,7 +116,8 @@ export default function RamadanHome({ navigation }) {
                 color='green'
                 title="Reserve Place"
                 onPress={() => {
-                    Alert.alert('Simple Button pressed');
+                    Alert.alert('T9der takhed lmo3awana');
+                    Reserv()
                 }}
               />
            </View>
@@ -108,10 +125,6 @@ export default function RamadanHome({ navigation }) {
     </View>
    
   );
-}
-
-export function Test(){
-    console.log('hola')
 }
 
 const styles = StyleSheet.create({
@@ -122,7 +135,7 @@ const styles = StyleSheet.create({
 
   input: {
     height: 40,
-    margin: 9,
+    margin: 6,
     borderWidth: 1,
     backgroundColor:'white',
     textAlign:'center'

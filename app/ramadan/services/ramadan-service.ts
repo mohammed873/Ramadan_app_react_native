@@ -7,12 +7,10 @@ export class RamadanService {
 
     add(ramadan : any) {
         console.log(ramadan);
-        console.log("ajouté le :"+Timestamp);
-        /*
-        *
-        *
-        * Ici c'est le code d'insertion dans la base de données Firestore
-        * 
-        */ 
-      }
+        console.log("added :"+Timestamp);
+    }
+    get(ramadan : any) {
+        console.log(ramadan);
+        console.log("get :"+Timestamp);
+    }
 }

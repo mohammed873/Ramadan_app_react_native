@@ -1,16 +1,48 @@
-import React,{useEffect} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React,{useEffect, useState} from 'react';
+import { StyleSheet, Text, View , Button} from 'react-native';
 import {RamadanMapsEnum} from '../../shared/enums/ramdan_maps.enum';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import firebase from 'firebase'
+import firestore from 'firebase/firestore'
 
+    // init firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCksrr5-hR6N1dvAz7aOSklKyUg5P-tDk",
+      authDomain: "ramadan-20380.firebaseapp.com",
+      projectId: "ramadan-20380",
+      storageBucket: "ramadan-20380.appspot.com",
+      messagingSenderId: "532203398613",
+      appId: "1:532203398613:web:8925f5a1f579f71d91095c"
+    };
+  //  firebase.initializeApp(firebaseConfig);
+  firebase.firestore();
 export default function HelpMap() {
-    let ramadanMapsEnum = RamadanMapsEnum;  
-    let coordinates_marker = {
-        latitude : 32.296418099951424,
-        longitude : -9.241842831480078
-    }
+  const [info, setInfo] = useState([]); 
+
+  let arr = []
+   var db = firebase.firestore().collection('assistance')
+  
+   async function  getAssistance() {
+     const assistances = firebase.firestore().collection('assistance')
+     const querySnapshot = await assistances.get()
+     const tempDoc = querySnapshot.docs.map((doc:any) => {
+       return { id: doc.id, ...doc.data() }
+
+     })
+     const allAssistance = tempDoc;
+     setInfo(allAssistance)
+     return allAssistance;
+     
+ }
+
+ 
+   function setMap ()  {
+    return info.map((i) => <Marker coordinate={{ latitude: i.latitude, longitude: i.longtitude }}></Marker >)
+   } 
+    
 
   return (
+    <>
     <View style={styles.container}>
       
       <MapView
@@ -23,15 +55,21 @@ export default function HelpMap() {
           longitudeDelta : 0.0121 
         }}
         >
-            <Marker coordinate = {coordinates_marker}/>
+         {setMap ()}
         </MapView>
  
     </View>
+    <View style={{marginTop:'2%', marginLeft:'2%'}}>
+    <Button
+        color='blue'
+        title="Show all Assistances"
+        onPress={() => {
+        getAssistance()
+    }}
+    />
+  </View>
+  </>
   );
-}
-
-export function Test(){
-    console.log('hola')
 }
 
 const styles = StyleSheet.create({
